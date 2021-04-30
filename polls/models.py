@@ -1,6 +1,4 @@
-from django.db import models
-
-# Create your models here.
+import datetime
 from django.db import models
 from django.utils import timezone
 
@@ -41,4 +39,23 @@ class Question(models.Model):
         time = timezone.now() - datetime.timedelta(hours=23, minutes=59, seconds=59)
         recent_question = Question(pub_date=time)
         self.assertIs(recent_question.was_published_recently(), True)
+
+
+class Choice(models.Model):
+
+    question = models.ForeignKey(Question, on_delete=models.CASCADE) #บอกว่าเป็นตัวเลือกของคำถามข้อไหน
+    choice_text = models.CharField(max_length=200) #เก็บชื่อตัวเลือก
+    votes = models.IntegerField(default=0) #จำนวนการโหวต
+    lastVoteTime = models.DateTimeField('lastVoteTime',auto_now_add=True)
+
+    def __str__(self):
+        return self.choice_text #แสดงชื่อตัวเลือก
+
+class Vote(models.Model):
+    
+    time = models.DateTimeField('pub date',auto_now_add=True)  # attribute  สำหรับเก็บค่าเวลา
+    choice = models.ForeignKey(Choice, on_delete=models.CASCADE) # attribute ใช้เเสดงความสัมพันธ์บอกว่า Vote นี้อยู่ใน choice ไหน
+
+    def __str__(self):
+        return str(self.time.date())+" "+str(self.time.strftime("%H:%M:%S")) #แสดงผลลัพธ์ในรูปของ ชม.:นาที:วินาที
 

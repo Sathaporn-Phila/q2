@@ -1,6 +1,6 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
-from .models import Question
+from .models import Question,Choice,Vote
 # Create your views here.
 def display(request):
     return render(request,"polls/index.html")
