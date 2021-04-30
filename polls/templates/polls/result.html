@@ -1,0 +1,24 @@
+<h1>{{ question.question_text }}</h1>
+<form action="{% url 'polls:sortResult' question.id %}" method="post">
+    {% csrf_token %}
+    <label for="sortResult">SORT:</label>
+    <select id="sortResult" name="sortResult">
+        <option disabled selected value></option>
+        <option value="maxToMinV">max-->min Vote</option>
+        <option value="minToMaxV">min-->max Vote</option>
+        <option value="lastToOldT">lastest-->oldest</option>
+        <option value="oldToLastT">oldest-->lastest</option>
+    </select>
+    <input type="submit">
+</form>
+<ul>
+{% for choice in choices %} <!-- สร้างlist ของ choice เเล้วบอกจำนวน vote -->
+    <li>{{ choice.choice_text }} -- {{ choice.votes }} vote{{ choice.votes|pluralize }} --{{choice.lastVoteTime}}
+    </li>
+    {% for time in choice.vote_set.all %} <!--บอกเวลาของเเต่ละ Vote-->
+        <p>{{time}}</p> 
+    {% endfor %}
+{% endfor %}
+</ul>
+
+<a href="{% url 'polls:detail' question.id %}">Vote again?</a>

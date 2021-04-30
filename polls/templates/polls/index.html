@@ -1,1 +1,25 @@
-<h1>Welcome to my polls</h1>
+<!--เเสดงคำถามเพื่อเข้าไปเลือก choice-->
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
+<form action="{% url 'polls:index' %}" method="post">
+    {% csrf_token %}
+    <select name="sort" id="display">
+        <option disabled selected value></option>
+        <option value="maxToMinV">max-->min Vote</option>
+        <option value="minToMaxV">min-->max Vote</option>
+        <option value="lastToOldT">lastest-->oldest</option>
+        <option value="oldToLastT">oldest-->lastest</option>
+        
+    </select>
+    <input type="submit" value="Sort">
+</form>
+{% if latest_question_list %}
+    <ul>
+    {% for question in latest_question_list %}
+    <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }} คะเเนน Vote รวม {{ question.allVote }} </a><p>เวลาล่าสุด {{ question.lastVoteTime }}</p></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}
